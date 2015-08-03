@@ -1,0 +1,13 @@
+FROM scratch
+MAINTAINER Arun Neelicattu <arun.neelicattu@gmail.com>
+
+ADD ./rootfs/usr/sbin/bird /bird
+ADD ./rootfs/bird.conf /bird.conf
+ADD ./rootfs/lib64 /lib64
+ADD ./rootfs/var /var
+
+VOLUME ["/var/log", "/var/run"]
+EXPOSE 179/tcp
+
+ENTRYPOINT ["/bird"]
+CMD ["-c", "/bird.conf", "-s", "/bird.ctl", "-f"]

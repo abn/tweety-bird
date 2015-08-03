@@ -1,0 +1,23 @@
+#!/bin/sh
+
+DEST=${DEST-rootfs}
+
+function loadfiles() {
+    for FILE in $1
+    do
+        echo "Loading ${FILE}"
+        mkdir -p ${DEST}$(dirname ${FILE})
+        cp ${FILE} ${DEST}${FILE}
+    done  
+}
+
+
+function loadbins() {
+    for BINFILE in $@; do
+        loadfiles ${BINFILE}
+        loadfiles "$(ldd ${BINFILE} | awk '{print $1}' | grep -e ^/)"
+        loadfiles "$(ldd ${BINFILE} | awk '{print $3}' | grep -e ^/lib)"
+    done
+}
+
+loadbins $@
