@@ -14,8 +14,11 @@ RUN mkdir -p ${BUILDROOT}
 WORKDIR ${BUILDROOT}
 
 RUN DEST=rootfs loadbins /usr/sbin/bird
-RUN cp /etc/bird.conf ./rootfs/bird.conf
+RUN DEST=rootfs loadbins /usr/sbin/birdc
+RUN mkdir -p ./rootfs/etc/bird.d
 RUN mkdir -p ./rootfs/var/{log,run}
+
+COPY ./bird.conf ./rootfs/etc/bird.conf
 
 COPY Dockerfile.final ./Dockerfile
 
